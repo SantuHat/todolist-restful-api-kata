@@ -1,4 +1,15 @@
 const http = require('http');
+const { v4: uuidv4 } = require('uuid');
+const todos = [
+  {
+    "title":"今天要刷牙",
+    "id": uuidv4()
+  },
+  {
+    "title":"今天要睡覺",
+    "id": uuidv4()
+  }
+]
 
 const requestListener = (req, res) => {
   const headers = {
@@ -15,7 +26,7 @@ const requestListener = (req, res) => {
     res.write(
       JSON.stringify({
         status: 'success',
-        data: [],
+        data: todos,
       })
     );
     res.end();
