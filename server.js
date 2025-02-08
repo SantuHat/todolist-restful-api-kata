@@ -12,7 +12,7 @@ const requestListener = (req, res) => {
   };
   console.log(req.url);
   console.log(req.method);
-  if (req.url == '/' && req.method == 'GET') {
+  if (req.url == '/todos' && req.method == 'GET') {
     res.writeHead(200, headers);
     res.write(
       JSON.stringify({
