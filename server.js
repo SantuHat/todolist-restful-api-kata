@@ -21,9 +21,14 @@ const requestListener = (req, res) => {
       })
     );
     res.end();
-  } else if (req.url == '/' && req.method == 'DELETE') {
+  } else if (req.url == '/todos' && req.method == 'POST') {
     res.writeHead(200, headers);
-    res.write('delete');
+    res.write(
+      JSON.stringify({
+        status: 'success',
+        data: todos,
+      })
+    );
     res.end();
   } else if (req.method == 'OPTIONS') {
     res.writeHead(200, headers);
