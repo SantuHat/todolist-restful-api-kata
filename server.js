@@ -31,28 +31,38 @@ const requestListener = (req, res) => {
     req.on('end', () => {
       try {
         const title = JSON.parse(body).title;
-        if(title !== undefined) {
+        if (title !== undefined) {
           const todo = {
             title: title,
             id: uuidv4(),
           };
           todos.push(todo);
-  
+
           res.writeHead(200, headers);
           res.write(
             JSON.stringify({
-              "status": 'success',
-              "data": todos,
+              status: 'success',
+              data: todos,
             })
           );
           res.end();
-        }else {
+        } else {
           errorHandle(res);
         }
       } catch (err) {
         errorHandle(res);
       }
     });
+  } else if (req.url == '/todos' && req.method == 'DELETE') {
+    todos.length = 0;
+    res.writeHead(200, headers);
+    res.write(
+      JSON.stringify({
+        status: 'success',
+        message: 'delete!',
+      })
+    );
+    res.end();
   } else if (req.method == 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
@@ -60,8 +70,8 @@ const requestListener = (req, res) => {
     res.writeHead(404, headers);
     res.write(
       JSON.stringify({
-        "status": 'false',
-        "message": '無此網站路由',
+        status: 'false',
+        message: '無此網站路由',
       })
     );
     res.end();
