@@ -63,6 +63,23 @@ const requestListener = (req, res) => {
       })
     );
     res.end();
+  } else if (req.url.startsWith('/todos/') && req.method == 'DELETE') {
+    const id = req.url.split('/').pop();
+    const index = todos.findIndex((element) => element.id == id);
+    console.log(id, index);
+    if (index !== -1) {
+      todos.splice(index, 1);
+      res.writeHead(200, headers);
+      res.write(
+        JSON.stringify({
+          status: 'success',
+          message: todos,
+        })
+      );
+      res.end();
+    } else {
+      errorHandle(res);
+    }
   } else if (req.method == 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
