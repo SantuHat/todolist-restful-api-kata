@@ -12,14 +12,11 @@ const requestListener = (req, res) => {
   };
   let body = '';
   req.on('data', (chunk) => {
-    console.log(chunk);
+    // console.log(chunk);
     body += chunk;
   });
-  req.on('end', () => {
-    console.log(JSON.parse(body));
-  });
-  console.log(req.url);
-  console.log(req.method);
+  // console.log(req.url);
+  // console.log(req.method);
   if (req.url == '/todos' && req.method == 'GET') {
     res.writeHead(200, headers);
     res.write(
@@ -30,14 +27,23 @@ const requestListener = (req, res) => {
     );
     res.end();
   } else if (req.url == '/todos' && req.method == 'POST') {
-    res.writeHead(200, headers);
-    res.write(
-      JSON.stringify({
-        status: 'success',
-        data: todos,
-      })
-    );
-    res.end();
+    req.on('end', () => {
+      const title = JSON.parse(body).title;
+      const todo = {
+        "title": title,
+        "id": uuidv4()
+      }
+      todos.push(todo);
+      
+      res.writeHead(200, headers);
+      res.write(
+        JSON.stringify({
+          status: 'success',
+          data: todos,
+        })
+      );
+      res.end();
+    });
   } else if (req.method == 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
