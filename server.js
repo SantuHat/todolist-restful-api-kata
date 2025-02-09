@@ -10,6 +10,14 @@ const requestListener = (req, res) => {
     'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
     'Content-Type': 'application/json',
   };
+  let body = '';
+  req.on('data', (chunk) => {
+    console.log(chunk);
+    body += chunk;
+  });
+  req.on('end', () => {
+    console.log(JSON.parse(body));
+  });
   console.log(req.url);
   console.log(req.method);
   if (req.url == '/todos' && req.method == 'GET') {
