@@ -28,21 +28,32 @@ const requestListener = (req, res) => {
     res.end();
   } else if (req.url == '/todos' && req.method == 'POST') {
     req.on('end', () => {
-      const title = JSON.parse(body).title;
-      const todo = {
-        "title": title,
-        "id": uuidv4()
+      try {
+        const title = JSON.parse(body).title;
+        const todo = {
+          title: title,
+          id: uuidv4(),
+        };
+        todos.push(todo);
+
+        res.writeHead(200, headers);
+        res.write(
+          JSON.stringify({
+            "status": 'success',
+            "data": todos,
+          })
+        );
+        res.end();
+      } catch (err) {
+        res.writeHead(400, headers);
+        res.write(
+          JSON.stringify({
+            status: 'false',
+            message: '欄位未填寫正確，或無此 todo id',
+          })
+        );
+        res.end();
       }
-      todos.push(todo);
-      
-      res.writeHead(200, headers);
-      res.write(
-        JSON.stringify({
-          status: 'success',
-          data: todos,
-        })
-      );
-      res.end();
     });
   } else if (req.method == 'OPTIONS') {
     res.writeHead(200, headers);
@@ -51,8 +62,8 @@ const requestListener = (req, res) => {
     res.writeHead(404, headers);
     res.write(
       JSON.stringify({
-        status: 'false',
-        message: '無此網站路由',
+        "status": 'false',
+        "message": '無此網站路由',
       })
     );
     res.end();
