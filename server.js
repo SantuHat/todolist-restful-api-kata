@@ -30,20 +30,31 @@ const requestListener = (req, res) => {
     req.on('end', () => {
       try {
         const title = JSON.parse(body).title;
-        const todo = {
-          title: title,
-          id: uuidv4(),
-        };
-        todos.push(todo);
-
-        res.writeHead(200, headers);
-        res.write(
-          JSON.stringify({
-            "status": 'success',
-            "data": todos,
-          })
-        );
-        res.end();
+        if(title !== undefined) {
+          const todo = {
+            title: title,
+            id: uuidv4(),
+          };
+          todos.push(todo);
+  
+          res.writeHead(200, headers);
+          res.write(
+            JSON.stringify({
+              "status": 'success',
+              "data": todos,
+            })
+          );
+          res.end();
+        }else {
+          res.writeHead(400, headers);
+          res.write(
+            JSON.stringify({
+              status: 'false',
+              message: '欄位未填寫正確，或無此 todo id',
+            })
+          );
+          res.end();
+        }
       } catch (err) {
         res.writeHead(400, headers);
         res.write(
